@@ -1,5 +1,7 @@
 import express from 'express';
 import cors from 'cors';
+import bookRoutes from './routes/bookRoutes';
+import { errorHandler } from './middlewares/errorHandler';
 
 const app = express();
 
@@ -9,5 +11,9 @@ app.use(express.json());
 app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok', message: 'API is running' });
 });
+
+app.use('/api/books', bookRoutes);
+
+app.use(errorHandler);
 
 export default app;
