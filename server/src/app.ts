@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import authRoutes from './routes/authRoutes';
 import bookRoutes from './routes/bookRoutes';
+import orderRoutes from './routes/orderRoutes';
 import { errorHandler } from './middlewares/errorHandler';
 
 const app = express();
@@ -15,6 +16,7 @@ app.get('/api/health', (_req, res) => {
 
 app.use('/api/auth', authRoutes);
 app.use('/api/books', bookRoutes);
+app.use('/api/orders', orderRoutes);
 
 app.use(errorHandler);
 
