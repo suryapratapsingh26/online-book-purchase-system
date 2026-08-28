@@ -7,7 +7,6 @@ const bookSelect = {
   description: true,
   price: true,
   coverImage: true,
-  filePath: true,
 } as const;
 
 const toCatalogBook = (book: {
@@ -17,7 +16,6 @@ const toCatalogBook = (book: {
   description: string;
   price: { toString(): string };
   coverImage: string | null;
-  filePath: string;
 }) => ({
   ...book,
   price: Number(book.price).toFixed(2),
