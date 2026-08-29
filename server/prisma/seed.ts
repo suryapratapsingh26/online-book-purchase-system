@@ -304,17 +304,8 @@ const catalogBooks = [
 ];
 
 const seed = async () => {
-  const seedIds = catalogBooks.map((book) => book.id);
-
-  await prisma.$transaction([
-    prisma.book.deleteMany({
-      where: {
-        id: {
-          notIn: seedIds,
-        },
-      },
-    }),
-    ...catalogBooks.map((book) =>
+  await prisma.$transaction(
+    catalogBooks.map((book) =>
       prisma.book.upsert({
         where: { id: book.id },
         update: {
@@ -327,8 +318,8 @@ const seed = async () => {
         },
         create: book,
       })
-    ),
-  ]);
+    )
+  );
 
   const bookCount = await prisma.book.count();
   console.log(`Seeded ${bookCount} books.`);
