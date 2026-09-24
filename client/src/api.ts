@@ -2,12 +2,31 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import type { RootState } from "./store";
 
 export type User = { id: string; email: string };
-export type Book = { id: string; title: string; author: string; description: string; price: string; coverImage: string | null };
-export type Order = { id: string; bookId: string; amount: string; status: "PENDING" | "PAID" | "CANCELLED" | "FAILED"; createdAt: string; book: Pick<Book, "id" | "title" | "author" | "coverImage"> };
+export type Book = {
+  id: string;
+  title: string;
+  author: string;
+  description: string;
+  price: string;
+  coverImage: string | null;
+};
+export type Order = {
+  id: string;
+  bookId: string;
+  amount: string;
+  status: "PENDING" | "PAID" | "CANCELLED" | "FAILED";
+  createdAt: string;
+  book: Pick<Book, "id" | "title" | "author" | "coverImage">;
+};
 
 type ApiResponse<T> = { data: T };
 type AuthResult = { token: string; user: User };
-type PaymentOrder = { id: string; amount: number; currency: string; keyId: string };
+type PaymentOrder = {
+  id: string;
+  amount: number;
+  currency: string;
+  keyId: string;
+};
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000/api";
 
@@ -24,10 +43,16 @@ export const api = createApi({
   }),
   tagTypes: ["Session", "Books", "Orders"],
   endpoints: (builder) => ({
-    register: builder.mutation<ApiResponse<{ user: User }>, { email: string; password: string }>({
+    register: builder.mutation<
+      ApiResponse<{ user: User }>,
+      { email: string; password: string }
+    >({
       query: (body) => ({ url: "/auth/register", method: "POST", body }),
     }),
-    login: builder.mutation<ApiResponse<AuthResult>, { email: string; password: string }>({
+    login: builder.mutation<
+      ApiResponse<AuthResult>,
+      { email: string; password: string }
+    >({
       query: (body) => ({ url: "/auth/login", method: "POST", body }),
       invalidatesTags: ["Session"],
     }),
@@ -47,10 +72,20 @@ export const api = createApi({
       query: (body) => ({ url: "/orders", method: "POST", body }),
       invalidatesTags: ["Orders"],
     }),
-    createPaymentOrder: builder.mutation<ApiResponse<PaymentOrder>, { orderId: string }>({
-      query: (body) => ({ url: "/payments/create-order", method: "POST", body }),
+    createPaymentOrder: builder.mutation<
+      ApiResponse<PaymentOrder>,
+      { orderId: string }
+    >({
+      query: (body) => ({
+        url: "/payments/create-order",
+        method: "POST",
+        body,
+      }),
     }),
-    verifyPayment: builder.mutation<ApiResponse<{ orderId: string; status: string }>, Record<string, string>>({
+    verifyPayment: builder.mutation<
+      ApiResponse<{ orderId: string; status: string }>,
+      Record<string, string>
+    >({
       query: (body) => ({ url: "/payments/verify", method: "POST", body }),
       invalidatesTags: ["Orders"],
     }),
