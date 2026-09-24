@@ -1,4 +1,8 @@
-import { configureStore, createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import {
+  configureStore,
+  createSlice,
+  type PayloadAction,
+} from "@reduxjs/toolkit";
 import { api } from "./api";
 
 type User = { id: string; email: string };
@@ -17,7 +21,10 @@ const sessionSlice = createSlice({
     user: null,
   } as SessionState,
   reducers: {
-    setSession: (state, action: PayloadAction<{ token: string; user: User }>) => {
+    setSession: (
+      state,
+      action: PayloadAction<{ token: string; user: User }>,
+    ) => {
       state.token = action.payload.token;
       state.user = action.payload.user;
       localStorage.setItem(tokenKey, action.payload.token);
@@ -40,7 +47,8 @@ export const store = configureStore({
     session: sessionSlice.reducer,
     [api.reducerPath]: api.reducer,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(api.middleware),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(api.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
